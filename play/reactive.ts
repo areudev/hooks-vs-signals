@@ -10,7 +10,13 @@ function subscribe(observer: Observer, subscriptions: Set<Observer>) {
 	subscriptions.add(observer)
 	observer.depedencies.add(subscriptions)
 }
-function cleanup(effect: Observer) {}
+
+function cleanup(observer: Observer) {
+	for (const dep of observer.depedencies) {
+		dep.delete(observer)
+	}
+	observer.depedencies.clear()
+}
 
 export function createSignal<T>(
 	initialValue: T
@@ -47,4 +53,10 @@ export function createEffect(fn: () => void): void {
 	}
 
 	effect.execute()
+}
+
+export function createMemo<T>(fn: () => T): () => T {
+	const [signal, setSignal] = createSignal<T>(undefined as any)
+	createEffect(() => setSignal(fn()))
+	return signal
 }
