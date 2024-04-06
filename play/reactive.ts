@@ -1,26 +1,34 @@
-interface Executable {
+interface Observer {
 	execute: () => void
+	depedencies: Set<Set<Observer>>
 }
 
-const context: Array<Executable> = []
+const context: Array<Observer> = []
+
+function subscribe(observer: Observer, subscriptions: Set<Observer>) {
+	if (observer.depedencies.has(subscriptions)) return
+	subscriptions.add(observer)
+	observer.depedencies.add(subscriptions)
+}
+function cleanup(effect: Observer) {}
 
 export function createSignal<T>(
 	initialValue: T
 ): [() => T, (newValue: T) => void] {
-	let subscriptions = new Set<Executable>()
+	let subscriptions = new Set<Observer>()
 
 	let value: T = initialValue
 
 	const read = (): T => {
 		const observer = context[context.length - 1]
-		if (observer) subscriptions.add(observer)
+		if (observer) subscribe(observer, subscriptions)
 
 		return value
 	}
 	const write = (newValue: T): void => {
 		value = newValue
-		for (const subscription of subscriptions) {
-			subscription.execute()
+		for (const observer of [...subscriptions]) {
+			observer.execute()
 		}
 	}
 
@@ -30,10 +38,12 @@ export function createSignal<T>(
 export function createEffect(fn: () => void): void {
 	const effect = {
 		execute() {
+			cleanup(effect)
 			context.push(effect)
 			fn()
 			context.pop()
 		},
+		depedencies: new Set<Set<Observer>>(),
 	}
 
 	effect.execute()

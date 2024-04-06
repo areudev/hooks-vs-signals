@@ -1,10 +1,15 @@
 import { createSignal, createEffect } from './reactive'
 
 const [count, setCount] = createSignal(0)
+const [count2, setCount2] = createSignal(2)
+const [show, setShow] = createSignal(true)
 
 createEffect(() => {
-	console.log('count:', count())
+	if (show()) {
+		console.log('count:', count())
+	} else {
+		console.log('count2:', count2())
+	}
 })
-
-setCount(5)
-setCount(10)
+setShow(false)
+setCount(1)
