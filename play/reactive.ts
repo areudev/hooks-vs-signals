@@ -3,7 +3,15 @@ interface Observer {
 	depedencies: Set<Set<Observer>>
 }
 
-const context: Array<Observer> = []
+let context: Array<Observer> = []
+
+function untrack(fn: () => {}) {
+	const prevContext = context
+	context = []
+	const res = fn()
+	context = prevContext
+	return res
+}
 
 function subscribe(observer: Observer, subscriptions: Set<Observer>) {
 	if (observer.depedencies.has(subscriptions)) return
