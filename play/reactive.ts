@@ -5,7 +5,7 @@ interface Observer {
 
 let context: Array<Observer> = []
 
-function untrack(fn: () => {}) {
+export function untrack(fn: () => {}) {
 	const prevContext = context
 	context = []
 	const res = fn()
