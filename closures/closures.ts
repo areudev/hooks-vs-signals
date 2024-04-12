@@ -1,15 +1,17 @@
-export function useState<T>(initialState: T): [() => T, (newState: T) => void] {
-	let state = initialState
-
+import { Component } from './main'
+let _state: unknown
+export function useState<T>(initialState: T): [T, (newState: T) => void] {
+	let state = (_state as T) || initialState
 	const setState = (newState: T) => {
 		state = newState
 	}
 
-	return [() => state, setState]
+	return [state, setState]
 }
 
-const [count, setCount] = useState(0)
+export function render(component: typeof Component) {
+	const instance = component()
 
-console.log(count())
-setCount(10)
-console.log(count())
+	instance.render()
+	return instance
+}
