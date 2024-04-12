@@ -3,8 +3,9 @@ let hooks: unknown[] = []
 let idx = 0
 export function useState<T>(initialState: T): [T, (newState: T) => void] {
 	let state = (hooks[idx] as T) || initialState
+	const _idx = idx
 	const setState = (newState: T) => {
-		state = newState
+		hooks[_idx] = newState
 	}
 	idx++
 	return [state, setState]
