@@ -1,14 +1,15 @@
-function getAdd() {
-	let foo = 0
-	return () => {
-		foo++
-		return foo
+export function useState<T>(initialState: T): [T, (newState: T) => void] {
+	let state = initialState
+
+	const setState = (newState: T) => {
+		state = newState
 	}
+
+	return [state, setState]
 }
 
-const add = getAdd()
+const [count, setCount] = useState(0)
 
-console.log(add())
-console.log(add())
-console.log(add())
-console.log(add())
+console.log(count)
+setCount(10)
+console.log(count)
