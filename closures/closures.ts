@@ -11,6 +11,8 @@ export function useState<T>(initialState: T): [T, (newState: T) => void] {
 	return [state, setState]
 }
 
+export function useEffect(fn: () => void, deps: unknown[]) {}
+
 export function render(component: typeof Component) {
 	idx = 0
 	const instance = component()
