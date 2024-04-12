@@ -1,7 +1,12 @@
-import { useState, render } from './closures'
+import { useState, render, useEffect } from './closures'
 export function Component() {
 	const [count, setCount] = useState(1)
 	const [text, setText] = useState('apple')
+
+	useEffect(() => {
+		console.log('effect')
+	}, [])
+
 	return {
 		render: () => {
 			console.log({

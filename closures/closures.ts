@@ -11,7 +11,14 @@ export function useState<T>(initialState: T): [T, (newState: T) => void] {
 	return [state, setState]
 }
 
-export function useEffect(fn: () => void, deps: unknown[]) {}
+export function useEffect(fn: () => void, deps: unknown[]) {
+	const oldDeps = hooks[idx] as unknown[]
+	let hasChanged = true
+
+	if (hasChanged) fn()
+	hooks[idx] = deps
+	idx++
+}
 
 export function render(component: typeof Component) {
 	idx = 0
