@@ -5,7 +5,7 @@ export function Component() {
 
 	useEffect(() => {
 		console.log('effect')
-	}, [])
+	}, [text])
 
 	return {
 		render: () => {

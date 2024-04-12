@@ -15,6 +15,9 @@ export function useEffect(fn: () => void, deps: unknown[]) {
 	const oldDeps = hooks[idx] as unknown[]
 	let hasChanged = true
 
+	if (oldDeps) {
+		hasChanged = deps.some((dep, i) => !Object.is(dep, oldDeps[i]))
+	}
 	if (hasChanged) fn()
 	hooks[idx] = deps
 	idx++
