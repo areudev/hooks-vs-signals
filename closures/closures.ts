@@ -3,6 +3,11 @@ let hooks: unknown[] = []
 let idx = 0
 export function useState<T>(initialState: T): [T, (newState: T) => void] {
 	let state = (hooks[idx] as T) || initialState
+	// let state =
+	// 	(hooks[idx] as T) ||
+	// 	(typeof initialState === 'function'
+	// 		? (initialState as () => T)()
+	// 		: initialState)
 	const _idx = idx
 	const setState = (newState: T) => {
 		hooks[_idx] = newState
