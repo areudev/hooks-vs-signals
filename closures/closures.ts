@@ -16,14 +16,20 @@ export function useState<T>(initialState: T): [T, (newState: T) => void] {
 	return [state, setState]
 }
 
-export function useEffect(fn: () => void, deps: unknown[]) {
+export function useEffect(fn: () => void | (() => void), deps: unknown[]) {
 	const oldDeps = hooks[idx] as unknown[]
 	let hasChanged = true
 
 	if (oldDeps) {
 		hasChanged = deps.some((dep, i) => !Object.is(dep, oldDeps[i]))
 	}
-	if (hasChanged) fn()
+	if (hasChanged) {
+		const returnedFn = fn()
+		if (typeof returnedFn === 'function') {
+			returnedFn()
+		}
+	}
+
 	hooks[idx] = deps
 	idx++
 }

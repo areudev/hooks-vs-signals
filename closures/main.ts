@@ -5,6 +5,10 @@ export function Component() {
 
 	useEffect(() => {
 		console.log('effect')
+
+		return () => {
+			console.log('cleanup')
+		}
 	}, [text])
 
 	return {
